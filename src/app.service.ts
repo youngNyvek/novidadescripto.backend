@@ -35,6 +35,7 @@ export class AppService {
       'https://www.criptofacil.com/*',
       'https://portaldobitcoin.uol.com.br/*',
     ];
+
     const googleResults: NewsItem[] = [];
 
     for (const url of urls) {
