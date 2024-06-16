@@ -29,12 +29,7 @@ export class NewsMapper {
 @Injectable()
 export class AppService {
   async getNews(): Promise<any> {
-    const urls = [
-      'https://investnews.com.br/criptonews/*',
-      'https://www.infomoney.com.br/onde-investir/*',
-      'https://www.criptofacil.com/*',
-      'https://portaldobitcoin.uol.com.br/*',
-    ];
+    const urls = process.env.NEWS_URLS.split(',');
 
     const googleResults: NewsItem[] = [];
 
@@ -42,7 +37,7 @@ export class AppService {
       const customsearch = google.customsearch('v1');
       const result = await customsearch.cse.list({
         cx: process.env.GOOGLE_CX,
-        q: 'CRIPTO',
+        q: 'cripto',
         auth: process.env.GOOGLE_AUTH,
         sort: 'date',
         filter: '1',
@@ -61,6 +56,8 @@ export class AppService {
       newItem && googleResults.push(...newItem);
     }
 
-    return googleResults;
+    return googleResults.sort(
+      (a, b) => Number(b.dateTime) - Number(a.dateTime),
+    );
   }
 }
