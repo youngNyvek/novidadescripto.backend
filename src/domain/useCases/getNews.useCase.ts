@@ -27,7 +27,7 @@ export class NewsMapper {
 }
 
 @Injectable()
-export class AppService {
+export class GetNewsUseCase {
   async getNews(): Promise<any> {
     const urls = process.env.NEWS_URLS.split(',');
 
