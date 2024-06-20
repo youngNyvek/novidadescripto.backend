@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { GetNewsUseCase } from 'src/domain/useCases/getNews.useCase';
+import { UpdateNewsUseCase } from 'src/domain/useCases/updateNews.useCase';
 
 const CRON_PATTERN = '0 8,16,0 * * *';
 
 @Injectable()
 export class UpdateNewsWorker {
-  private readonly getNewsUseCase: GetNewsUseCase;
+  private readonly logger = new Logger(UpdateNewsWorker.name);
+  constructor(private readonly updateNews: UpdateNewsUseCase) {}
 
   @Cron(CRON_PATTERN)
   async execute(): Promise<any> {
@@ -14,8 +15,7 @@ export class UpdateNewsWorker {
       return;
     }
 
-    const news = this.getNewsUseCase.getNews();
-
-    return news;
+    this.logger.debug('Updating news');
+    await this.updateNews.execute();
   }
 }

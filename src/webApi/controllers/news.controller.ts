@@ -3,10 +3,10 @@ import { GetNewsUseCase } from '../../domain/useCases/getNews.useCase';
 
 @Controller('news')
 export class NewsController {
-  constructor(private readonly appService: GetNewsUseCase) {}
+  constructor(private readonly getNewsUseCase: GetNewsUseCase) {}
 
   @Get()
   getNews(): any {
-    return this.appService.getNews();
+    return this.getNewsUseCase.execute();
   }
 }
