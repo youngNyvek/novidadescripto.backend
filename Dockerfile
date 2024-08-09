@@ -11,8 +11,9 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.yarn \
     yarn install --frozen-lockfile
 
+    
 RUN yarn run build
-
+    
 EXPOSE 3001:3001
-
-CMD [ "yarn", "run", "start:dev" ]
+    
+CMD [ "node", "dist/main" ]

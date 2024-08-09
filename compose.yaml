@@ -1,13 +1,20 @@
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Docker Compose reference guide at
-# https://docs.docker.com/go/compose-spec-reference/
-
-# Here the instructions define your application as a service called "server".
-# This service is built from the Dockerfile in the current directory.
-# You can add other services your application may depend on here, such as a
-# database or a cache. For examples, see the Awesome Compose repository:
-# https://github.com/docker/awesome-compose
 services:
+  server:
+    image: nyvek/server-novidadescripto
+    depends_on:
+      - db
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      GOOGLE_CX: 8783c427bbca84c41
+      GOOGLE_AUTH: AIzaSyAbs6cnbj6BWQ-JDiTZWJJlTX09k-U8MJg
+      PRIVATE_KEY: AIzaSyAbs6cnbj6BWQ-JDiTZWJJlTX09k-U8MJg
+      PUBLIC_TOKEN: 86934993-b5f1-4691-83a4-2a3c35fe139f
+      NEWS_URLS: 'https://investnews.com.br/criptonews/*,https://www.infomoney.com.br/onde-investir/*,https://www.criptofacil.com/*'
+      DATABASE_URL: "mysql://root:root@db:3306/newscripto"
+    ports:
+      - 3001:3001
   db:
     image: mysql:8.0.30-debian
     environment:
@@ -15,21 +22,8 @@ services:
       MYSQL_DATABASE: newscripto
     ports:
       - 3306:3306
-  server:
-    depends_on:
-      - db
-    build:
-      context: .
-    environment:
-      NODE_ENV: development
-      GOOGLE_CX: 8783c427bbca84c41
-      GOOGLE_AUTH: AIzaSyAbs6cnbj6BWQ-JDiTZWJJlTX09k-U8MJg
-      PRIVATE_KEY: AIzaSyAbs6cnbj6BWQ-JDiTZWJJlTX09k-U8MJg
-      PUBLIC_TOKEN: 86934993-b5f1-4691-83a4-2a3c35fe139f
-      NEWS_URLS: 'https://investnews.com.br/criptonews/*,https://www.infomoney.com.br/onde-investir/*,https://www.criptofacil.com/*'
-      DATABASE_URL: "mysql://root:root@localhost:3306/newscripto"
-    ports:
-      - 3001:3001
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
   
 
 # The commented out section below is an example of how to define a PostgreSQL
